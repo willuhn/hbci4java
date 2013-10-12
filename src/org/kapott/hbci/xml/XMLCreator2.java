@@ -173,7 +173,7 @@ public class XMLCreator2
     }
 
     
-    private void warnUnimplemented(Element elem, String[] implAttrs,
+    private static void warnUnimplemented(Element elem, String[] implAttrs,
             String[] implChilds)
     {
         String elemName = elem.getNodeName();
@@ -295,131 +295,72 @@ public class XMLCreator2
         return result;
     }
     
+    private static void addArrayListToRestrictions(XMLEntity target, XMLData xmldata, String key, String value) {
+        final Map<String, Object> myRestrictions=getRestrictions(target, xmldata);
 
-    private void handleEnumeration(XMLEntity target, Element schemaElem, XMLData xmldata)
-    {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
+        @SuppressWarnings("unchecked")
+        ArrayList<String> values=(ArrayList<String>)myRestrictions.get(key);
+        if (values==null) {
+            values=new ArrayList<String>();
+            myRestrictions.put(key,values);
+        }
 
-        String enumvalue=schemaElem.getAttribute("value");
+        values.add(value);
+    }
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
+    private static void addStringToRestrictions(XMLEntity target, XMLData xmldata, String key, String value) {
+        getRestrictions(target, xmldata).put(key, value);
+    }
+
+    private static Map<String, Object> getRestrictions(XMLEntity target, XMLData xmldata) {
+        Map<String, Object> myRestrictions=xmldata.getRestrictions(target.getPath());
         if (myRestrictions==null) {
-            myRestrictions=new Hashtable();
+            myRestrictions=new Hashtable<String, Object>();
             xmldata.setRestrictions(target.getPath(), myRestrictions);
         }
+        return myRestrictions;
+    }
 
-        List valids=(List)myRestrictions.get("valids");
-        if (valids==null) {
-            valids=new ArrayList();
-            myRestrictions.put("valids",valids);
-        }
+    private static void handleStringValue(XMLEntity target, Element schemaElem, XMLData xmldata, String key) {
+        warnUnimplemented(schemaElem, new String[] {"value"}, new String[] {"annotation"});
+        addStringToRestrictions(target, xmldata, key, schemaElem.getAttribute("value"));
+    }
 
-        valids.add(enumvalue);
+    private static void handleListValue(XMLEntity target, Element schemaElem, XMLData xmldata, String key) {
+        warnUnimplemented(schemaElem, new String[] {"value"}, new String[] {"annotation"});
+        addArrayListToRestrictions(target, xmldata, key, schemaElem.getAttribute("value"));
+    }
+
+    private static void handleEnumeration(XMLEntity target, Element schemaElem, XMLData xmldata)
+    {
+        handleListValue(target, schemaElem, xmldata, "valids");
+    }
+    
+    private static void handleMinLength(XMLEntity target, Element schemaElem, XMLData xmldata)
+    {
+        handleStringValue(target, schemaElem, xmldata, "minsize");
     }
     
 
-    private void handleMinLength(XMLEntity target, Element schemaElem, XMLData xmldata)
+    private static void handleMaxLength(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
-
-        String minsize=schemaElem.getAttribute("value");
-
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("minsize", minsize);
+        handleStringValue(target, schemaElem, xmldata, "maxsize");
     }
-    
 
-    private void handleMaxLength(XMLEntity target, Element schemaElem, XMLData xmldata)
+    private static void handleMinInclusive(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
-
-        String maxsize=schemaElem.getAttribute("value");
-
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("maxsize", maxsize);
+        handleStringValue(target, schemaElem, xmldata, "minvalue");
     }
-    
 
-    private void handleMinInclusive(XMLEntity target, Element schemaElem, XMLData xmldata)
+    private static void handleMaxInclusive(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
-
-        String minvalue=schemaElem.getAttribute("value");
-
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("minvalue", minvalue);
+        handleStringValue(target, schemaElem, xmldata, "maxvalue");
     }
-    
 
-    private void handleMaxInclusive(XMLEntity target, Element schemaElem, XMLData xmldata)
+    private static void handlePattern(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
-
-        String maxvalue=schemaElem.getAttribute("value");
-
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("maxvalue", maxvalue);
+        handleListValue(target, schemaElem, xmldata, "patterns");
     }
-    
-
-    private void handlePattern(XMLEntity target, Element schemaElem, XMLData xmldata)
-    {
-        warnUnimplemented(schemaElem, 
-            new String[] {"value"}, 
-            new String[] {"annotation"});
-
-        String pattern=schemaElem.getAttribute("value");
-
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        List patterns=(List)myRestrictions.get("patterns");
-        if (patterns==null) {
-            patterns=new ArrayList();
-            myRestrictions.put("patterns",patterns);
-        }
-
-        patterns.add(pattern);
-    }
-    
 
     /* schemaRest ist ein restriction-Element, welches das aktuelle Element (target)
      * näher spezifiziert */

@@ -37,7 +37,7 @@ public class XMLData
     private Document   rootdoc;
     private Map<String,Node>        nodes;   // path -> node
     private Properties values;
-    private Map        restrictions;
+    private Map<String, Map<String, Object>> restrictions;
     private Map<String, Set<XMLEntity>>        errors;
     
     private boolean createOptionalElements;
@@ -46,7 +46,7 @@ public class XMLData
     {
         this.nodes=new Hashtable<String, Node>();
         this.values=new Properties();
-        this.restrictions=new Hashtable();
+        this.restrictions=new Hashtable<String, Map<String, Object>>();
         this.errors=new Hashtable<String, Set<XMLEntity>>();
     }
     
@@ -93,17 +93,17 @@ public class XMLData
         return this.errors;
     }
     
-    public Iterator getRestrictionPaths()
+    public Iterator<String> getRestrictionPaths()
     {
         return this.restrictions.keySet().iterator();
     }
     
-    public Map getRestrictions(String path)
+    public Map<String, Object> getRestrictions(String path)
     {
-        return (Map)this.restrictions.get(path);
+        return this.restrictions.get(path);
     }
     
-    public void setRestrictions(String path, Map restrictions)
+    public void setRestrictions(String path, Map<String, Object> restrictions)
     {
         this.restrictions.put(path, restrictions);
     }
