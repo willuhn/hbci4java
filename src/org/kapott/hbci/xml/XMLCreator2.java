@@ -295,6 +295,32 @@ public class XMLCreator2
         return result;
     }
     
+    private static void addArrayListToRestrictions(XMLEntity target, XMLData xmldata, String key, String value) {
+        Map<String, Object> myRestrictions=getRestrictions(target, xmldata);
+
+        @SuppressWarnings("unchecked")
+        ArrayList<String> values=(ArrayList<String>)myRestrictions.get(key);
+        if (values==null) {
+            values=new ArrayList<String>();
+            myRestrictions.put(key,values);
+        }
+
+        values.add(value);
+    }
+
+    private static void addStringToRestrictions(XMLEntity target, XMLData xmldata, String key, String value) {
+        Map<String, Object> myRestrictions = getRestrictions(target, xmldata);
+        myRestrictions.put(key, value);
+    }
+
+    private static Map<String, Object> getRestrictions(XMLEntity target, XMLData xmldata) {
+        Map<String, Object> myRestrictions=xmldata.getRestrictions(target.getPath());
+        if (myRestrictions==null) {
+            myRestrictions=new Hashtable<String, Object>();
+            xmldata.setRestrictions(target.getPath(), myRestrictions);
+        }
+        return myRestrictions;
+    }
 
     private void handleEnumeration(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
@@ -304,22 +330,9 @@ public class XMLCreator2
 
         String enumvalue=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        List valids=(List)myRestrictions.get("valids");
-        if (valids==null) {
-            valids=new ArrayList();
-            myRestrictions.put("valids",valids);
-        }
-
-        valids.add(enumvalue);
+        addArrayListToRestrictions(target, xmldata, "valids", enumvalue);
     }
     
-
     private void handleMinLength(XMLEntity target, Element schemaElem, XMLData xmldata)
     {
         warnUnimplemented(schemaElem, 
@@ -328,14 +341,7 @@ public class XMLCreator2
 
         String minsize=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("minsize", minsize);
+        addStringToRestrictions(target, xmldata, "minsize", minsize);
     }
     
 
@@ -347,14 +353,7 @@ public class XMLCreator2
 
         String maxsize=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("maxsize", maxsize);
+        addStringToRestrictions(target, xmldata, "maxsize", maxsize);
     }
     
 
@@ -366,14 +365,7 @@ public class XMLCreator2
 
         String minvalue=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("minvalue", minvalue);
+        addStringToRestrictions(target, xmldata, "minvalue", minvalue);
     }
     
 
@@ -385,14 +377,7 @@ public class XMLCreator2
 
         String maxvalue=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to class XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        myRestrictions.put("maxvalue", maxvalue);
+        addStringToRestrictions(target, xmldata, "maxvalue", maxvalue);
     }
     
 
@@ -404,20 +389,7 @@ public class XMLCreator2
 
         String pattern=schemaElem.getAttribute("value");
 
-        Map myRestrictions=xmldata.getRestrictions(target.getPath());
-        if (myRestrictions==null) {
-            // TODO: extract to XMLData
-            myRestrictions=new Hashtable();
-            xmldata.setRestrictions(target.getPath(), myRestrictions);
-        }
-
-        List patterns=(List)myRestrictions.get("patterns");
-        if (patterns==null) {
-            patterns=new ArrayList();
-            myRestrictions.put("patterns",patterns);
-        }
-
-        patterns.add(pattern);
+        addArrayListToRestrictions(target, xmldata, "patterns", pattern);
     }
     
 
