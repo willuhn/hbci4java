@@ -129,9 +129,33 @@ public final class SF
             char ch=sb.charAt(0);
             if (ch=='+' || ch==':' || ch=='\'')
                 startpos++;
-            
+
+
+            /*
+             *  bei SEPAInfo wird, zumindest bei mir, folgendes uebergeben (Hibiscus 2.6 -> Server)
+             * 'HKSPA:3:1'HNSHA:4:1+2027832869++12345'HNHBS:5:1+2'
+             * 
+             *  nach Startpos fix: HKSPA:3:1'HNSHA:4:1+2027832869++12345'HNHBS:5:1+2'
+             *  daraus ergibt sich eine endposition vom Zeichen "+": 20 (HKSPA:3:1'HNSHA:4:1)
+             *  
+             *  Beim aufsplitten beim Zeichen ":" ergibt sich hier raus:
+             *  
+             *  des[0] = HKSPA
+             *  des[1] = 3
+             *  des[2] = 1'HNSHA
+             *  des[3] = 4
+             *  des[4] = 1
+             *  
+             *  FIX: pruefen ob das Zeichen ' vor dem + kommt und die endposition entsprechend verschieben
+             */
+
+
             // erste DEG extrahieren
             int endpos=sb.indexOf("+",startpos);
+            int endposFix= sb.indexOf("\'",startpos);
+            if(endposFix>0 && endposFix < endpos)
+            	endpos=endposFix;
+
             if (endpos==-1) {
             	endpos=sb.length();
             }
