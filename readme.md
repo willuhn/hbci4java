@@ -56,6 +56,39 @@ Du kannst HBCI4Java entweder selbst compilieren (siehe folgender Absatz) - oder 
 - Immer wenn es eine Änderung im Code von [HBCI4Java](https://github.com/willuhn/hbci4java) gab, erzeuge ich auch neue JARs in [Hibiscus](https://github.com/willuhn/hibiscus/tree/master/lib)
 - In der [History](https://github.com/willuhn/hibiscus/commits/master/lib/hbci4java-2.5.12.jar) siehst du auch, welche Änderungen jeweils eingeflossen sind. 
 
+## Maven Repository
+
+Aktuell wird die erzeugte jar nicht in Maven Central ver\366ffentlicht. Um die Artefakte aufl\366sen zu k\366nnen kann dieses Repository genutzt werden:
+
+```xml
+<repositories>
+  ...
+  <repository>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+    <id>willuhn-hbci4java-snapshots</id>
+    <url>http://maven.impl.it/repository/willuhn-hbci4java-snapshots</url>
+  </repository>
+  ...
+</repositories>
+```
+
+```xml
+<dependencies>
+  ...
+  <dependency>
+    <groupId>org.kapott</groupId>
+    <artifactId>hbci4java</artifactId>
+    <version>2.5.13-SNAPSHOT</version>
+  </dependency>
+  ...
+</dependencies>
+```
+
 ## Selbst compilieren
 
 Du benötigst:
