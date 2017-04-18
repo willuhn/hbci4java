@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.manager;
 
+import java.lang.AutoCloseable;
 import java.lang.reflect.Constructor;
 import java.security.KeyPair;
 import java.util.Date;
@@ -83,7 +84,7 @@ HBCIExecStatus status=handle.execute();
 handle.close();
 </pre> */
 public final class HBCIHandler
-	implements IHandlerData
+	implements IHandlerData, AutoCloseable
 {
     public final static int REFRESH_BPD=1;
     public final static int REFRESH_UPD=2;

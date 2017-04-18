@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.comm;
 
+import java.lang.AutoCloseable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -38,7 +39,7 @@ import org.kapott.hbci.protocol.MSG;
 import org.kapott.hbci.protocol.factory.MSGFactory;
 import org.kapott.hbci.rewrite.Rewrite;
 
-public abstract class Comm
+public abstract class Comm implements AutoCloseable
 {
     /**
      * Der zu verwendende Zeichensatz.

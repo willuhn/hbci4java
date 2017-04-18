@@ -21,6 +21,7 @@
 
 package org.kapott.hbci.passport;
 
+import java.lang.AutoCloseable;
 import java.util.Properties;
 
 import org.kapott.hbci.manager.HBCIKey;
@@ -57,7 +58,7 @@ import org.kapott.hbci.structures.Konto;
     </ul>
     <p>Außerdem sind in einem Passport alle Methoden implementiert, die zur Durchführung
     der kryptografischen Operationen benötigt werden (verschlüsseln, signieren, usw.)</p>*/
-public interface HBCIPassport
+public interface HBCIPassport extends AutoCloseable
 {
     /** Rolle eines Passport-Objektes: Eigentümer ist Herausgeber der Nachricht.
      *  Wird in {@link org.kapott.hbci.GV.HBCIJob#addSignaturePassport(HBCIPassport, String)}
